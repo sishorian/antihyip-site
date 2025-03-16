@@ -1,0 +1,45 @@
+[project]
+name = "antihyip-site"
+version = "0.1.0"
+description = "Website designed to identify investment scams, like HYIP-pyramids, etc."
+authors = [
+    { name = "Roman Krotov", email = "152505489+sishorian@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "dj-database-url>=2.3.0",
+    "django<5.1",
+    "django-extensions>=3.2.3",
+    "ipython>=9.0.2",
+    "pyopenssl>=25.0.0",
+    "python-dotenv>=1.0.1",
+    "werkzeug>=3.1.3",
+    "whitenoise>=6.9.0",
+]
+
+[tool.uv]
+cache-dir = "../.uv_cache"
+
+[tool.ruff.lint]
+ignore = [
+    "E402", # module-import-not-at-top-of-file
+    # Analogue to pyright
+    "F401", # unused-import
+    "F841", # unused-variable (assigned but not used)
+    "F842", # unused-annotation (declaration)
+]
+
+[tool.basedpyright]
+# Analogue to ruff
+reportUnusedImport = "information"
+reportUnusedVariable = "information"
+# Django
+typeCheckingMode = "standard"
+reportAttributeAccessIssue = "none"
+
+[tool.djlint]
+profile="django"
+indent=2
+max_line_length=88
+preserve_blank_lines=true
+max_blank_lines=1
