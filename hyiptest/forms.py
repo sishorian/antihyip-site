@@ -1,19 +1,15 @@
 from django import forms
 
-from .models import Question
-
 
 # Forms here.
-class HyipTestForm(forms.Form):
+class SelectAnswerForm(forms.Form):
     """
-    Basic form for a pyramid test.
+    Form to select one of the Answers of a Question.
     """
 
     selected_answer = forms.ModelChoiceField(queryset=None, widget=forms.RadioSelect)
 
     def __init__(self, *args, **kwargs):
-        question_pk = kwargs.pop("question_pk")
+        question_obj = kwargs.pop("question_obj")
         super().__init__(*args, **kwargs)
-        self.fields["selected_answer"].queryset = Question.objects.get(
-            pk=question_pk
-        ).answer_set.all()
+        self.fields["selected_answer"].queryset = question_obj.answer_set.all()

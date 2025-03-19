@@ -14,6 +14,9 @@ class Question(models.Model):
         help_text="Clarify the question",
     )
 
+    def __str__(self):
+        return str(self.text)
+
 
 class Answer(models.Model):
     """
@@ -37,6 +40,9 @@ class Answer(models.Model):
         help_text="If chosen by user, flags the site as fraud",
     )
 
+    def __str__(self):
+        return str(self.text)
+
 
 class QGroup(models.Model):
     """
@@ -54,3 +60,6 @@ class QGroup(models.Model):
     questions = models.ManyToManyField(
         Question, help_text="That are part of this group"
     )
+
+    def __str__(self):
+        return str(self.name)
