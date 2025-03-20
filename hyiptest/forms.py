@@ -7,7 +7,9 @@ class SelectAnswerForm(forms.Form):
     Form to select one of the Answers of a Question.
     """
 
-    selected_answer = forms.ModelChoiceField(queryset=None, widget=forms.RadioSelect)
+    selected_answer = forms.ModelChoiceField(
+        queryset=None, label="Выберете ответ", widget=forms.RadioSelect
+    )
 
     def __init__(self, *args, **kwargs):
         question_obj = kwargs.pop("question_obj")

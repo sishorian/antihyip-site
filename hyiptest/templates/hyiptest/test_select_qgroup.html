@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Выберете категорию теста.</h1>
+  <ul>
+    {% for qgroup in qgroup_list %}
+      <li>
+        <a href="{% url 'test_redirect_question' qgroup.pk %}">{{ qgroup.name }}</a>
+      </li>
+    {% empty %}
+      <li>Тестов пока нет, приходите позже.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
