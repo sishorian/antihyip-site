@@ -48,7 +48,7 @@ def test_ask_question(request, qgroup_pk, question_index):
             form.is_valid()
             and form.cleaned_data["selected_answer"].bad_absolute is True
         ):
-            return redirect("test_select_qgroup")
+            return redirect("test_fail")
         elif form.is_valid() and question_index < (len(qgroup_questions) - 1):
             return redirect(
                 "test_ask_question",
@@ -56,7 +56,7 @@ def test_ask_question(request, qgroup_pk, question_index):
                 question_index=question_index + 1,
             )
         elif form.is_valid():
-            return redirect("index")
+            return redirect("test_pass")
     else:
         form = SelectAnswerForm(question_obj=current_question)
 
@@ -65,3 +65,11 @@ def test_ask_question(request, qgroup_pk, question_index):
         "question": current_question,
     }
     return render(request, "hyiptest/test_ask_question.html", context)
+
+
+def test_fail(request):
+    return render(request, "hyiptest/test_fail.html")
+
+
+def test_pass(request):
+    return render(request, "hyiptest/test_pass.html")

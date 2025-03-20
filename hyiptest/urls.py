@@ -18,4 +18,6 @@ urlpatterns = [
         views.test_ask_question,
         name="test_ask_question",
     ),
+    path("test/fail/", views.test_fail, name="test_fail"),
+    path("test/pass/", views.test_pass, name="test_pass"),
 ]
