@@ -1,7 +1,8 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Тест: Вопрос {{ question.pk }}</h1>
+  <h1>Тест: Вопрос {{ question_ordinal }} из {{ num_questions }}.</h1>
+  <p hidden>Тест выявил пирамиду: {{ fail_absolute }}</p>
   <p>{{ question.text }}</p>
 
   <form action="" method="post">
