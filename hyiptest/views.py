@@ -25,7 +25,7 @@ def test_redirect_question(request, qgroup_pk):
     qgroup = get_object_or_404(QGroup, pk=qgroup_pk)
     if not list(qgroup.questions.all()):
         raise Http404(f"QGroup {qgroup_pk} doesn't have any questions.")
-    request.session["fail_absolute"] = False
+    request.session["fail_score"] = 0
 
     return redirect("test_ask_question", qgroup_pk=qgroup_pk, question_index=0)
 
@@ -44,28 +44,29 @@ def test_ask_question(request, qgroup_pk, question_index):
             f"QGroup {qgroup_pk} doesn't have a question under index {question_index}."
         )
     qgroup_len = len(qgroup_questions)
-    if "fail_absolute" not in request.session:
+    if "fail_score" not in request.session:
         return HttpResponseBadRequest(
-            "No fail_absolute flag was provided.".encode(encoding="utf-8")
+            "No fail_score value was provided.".encode(encoding="utf-8")
         )
 
-    if request.method != "POST":
+    if request.method != "POST":  # to suppress "possibly unbound" error for form
         form = SelectAnswerForm(question_obj=current_question)
     else:
         form = SelectAnswerForm(request.POST, question_obj=current_question)
         while True:  # should not loop, run just once
             if not form.is_valid():
                 break
-            if form.cleaned_data["selected_answer"].bad_absolute is True:
-                request.session["fail_absolute"] = True
-                pass  # go to next if
+
+            request.session["fail_score"] += form.cleaned_data[
+                "selected_answer"
+            ].bad_score
             if question_index < qgroup_len - 1:  # i < last
                 return redirect(
                     "test_ask_question",
                     qgroup_pk=qgroup_pk,
                     question_index=question_index + 1,
                 )
-            if request.session["fail_absolute"] is True:
+            if request.session["fail_score"] >= 100:
                 return redirect("test_fail")
             return redirect("test_pass")  # break
 
@@ -74,7 +75,7 @@ def test_ask_question(request, qgroup_pk, question_index):
         "question_ordinal": question_index + 1,
         "num_questions": qgroup_len,
         "question": current_question,
-        "fail_absolute": request.session["fail_absolute"],
+        "fail_score": request.session["fail_score"],
     }
     return render(request, "hyiptest/test_ask_question.html", context)
 

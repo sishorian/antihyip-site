@@ -36,12 +36,21 @@ class Answer(models.Model):
         help_text=_("The question you are answering"),
     )
 
+    """
+    # Replaced by bad_score.
     bad_absolute = models.BooleanField(
         # Fail by default to reduce the theoretical damage
         # of "forgot to set the flag".
         default=True,  # pyright: ignore[reportArgumentType]
         help_text=_(  # pyright: ignore[reportArgumentType]
             "If chosen by user, flags the site as fraud"
+        ),
+    )
+    """
+    bad_score = models.SmallIntegerField(
+        default=100,  # pyright: ignore[reportArgumentType]
+        help_text=_(  # pyright: ignore[reportArgumentType]
+            "Likeliness of the site being a fraud, 100 = fraud"
         ),
     )
 
