@@ -66,7 +66,7 @@ def test_ask_question(request, qgroup_pk, question_index):
                     qgroup_pk=qgroup_pk,
                     question_index=question_index + 1,
                 )
-            if request.session["fail_score"] >= 100:
+            if request.session["fail_score"] >= 25:
                 return redirect("test_fail")
             return redirect("test_pass")  # break
 
