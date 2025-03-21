@@ -20,5 +20,10 @@ profile_default/
 ipython_config.py
 
 # antihyip-site
+# Ignore STATIC_ROOT
+staticfiles/
+# runserver_plus certificate and key
+runserver_plus.crt
+runserver_plus.key
 # igrone migrations until test deployment
 hyiptest/migrations/

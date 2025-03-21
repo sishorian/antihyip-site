@@ -12,6 +12,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+from .local_settings import (
+    LOCAL_ALLOWED_HOSTS,
+    LOCAL_CSRF_TRUSTED_ORIGINS,
+    LOCAL_DATABASE_URL,
+    LOCAL_DEBUG,
+    LOCAL_SECRET_KEY,
+    LOCAL_SECURE_SSL_REDIRECT,
+)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +29,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-xygdtw57i!_*5ne*r$p(2uwh-)5caz=wx8wm9fp6i+b_@zl1ci"
+SECRET_KEY = (
+    LOCAL_SECRET_KEY
+    if LOCAL_SECRET_KEY
+    else "django-insecure-xygdtw57i!_*5ne*r$p(2uwh-)5caz=wx8wm9fp6i+b_@zl1ci"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if LOCAL_DEBUG is False else True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    # localhost
+    ".localhost",
+    "127.0.0.1",
+    "[::1]",
+]
+
+ALLOWED_HOSTS += LOCAL_ALLOWED_HOSTS if LOCAL_ALLOWED_HOSTS else []
 
 
 # Application definition
@@ -46,6 +66,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -120,9 +141,60 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+# The absolute path to the directory where collectstatic
+# will collect static files for deployment.
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# The URL to use when referring to static files (where they will be served from)
 STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Redirect to home URL after login
+LOGIN_REDIRECT_URL = "/"
+
+# Update database configuration from $DATABASE_URL environment variable (if defined)
+import dj_database_url
+
+if LOCAL_DATABASE_URL is True:
+    DATABASES["default"] = (  # pyright: ignore[reportArgumentType]
+        dj_database_url.config(
+            conn_max_age=500,
+            conn_health_checks=True,
+        )
+    )
+
+# Static file serving.
+# https://whitenoise.readthedocs.io/en/stable/django.html#add-compression-and-caching-support
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# A list of trusted origins for unsafe requests (e.g. POST).
+# https://docs.djangoproject.com/en/5.0/ref/settings/#csrf-trusted-origins
+CSRF_TRUSTED_ORIGINS = LOCAL_CSRF_TRUSTED_ORIGINS if LOCAL_CSRF_TRUSTED_ORIGINS else []
+
+# Enforcing SSL/HTTPS.
+# https://docs.djangoproject.com/en/5.0/topics/security/#ssl-https
+# Clearing site data in browser may be required to fall back to HTTP.
+# SECURE_PROXY_SSL_HEADER = (,)  # make vps redirect to https instead
+SECURE_SSL_REDIRECT = (
+    False
+    if LOCAL_SECURE_SSL_REDIRECT is False
+    else True  # True by default in case of junk/typo for security
+)
+# Secure Cookies
+SESSION_COOKIE_SECURE = SECURE_SSL_REDIRECT
+CSRF_COOKIE_SECURE = SECURE_SSL_REDIRECT
+
+# HSTS policy informing browsers to refuse future connections to the site without HTTPS.
+# https://docs.djangoproject.com/en/5.0/ref/middleware/#http-strict-transport-security
+# https://hstspreload.org/
+# Don't use SECURE_HSTS_PRELOAD until the site is popular.
+# SECURE_HSTS_SECONDS = int(os.environ.get("DJANGO_SECURE_HSTS_SECONDS", "0"))
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = bool(SECURE_HSTS_SECONDS)
