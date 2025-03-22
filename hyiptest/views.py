@@ -11,12 +11,12 @@ def index(request):
     return render(request, "index.html")
 
 
-class TestSelectQGroup(generic.ListView):
+class SelectQGroup(generic.ListView):
     model = QGroup
-    template_name = "hyiptest/test_select_qgroup.html"
+    template_name = "hyiptest/select_qgroup.html"
 
 
-def test_redirect_question(request, qgroup_pk):
+def redirect_question(request, qgroup_pk):
     """
     Takes the selected QGroup and redirects user to the first question.
     Also responsible for setting the test score/flag.
@@ -27,10 +27,10 @@ def test_redirect_question(request, qgroup_pk):
         raise Http404(f"QGroup {qgroup_pk} doesn't have any questions.")
     request.session["fail_score"] = 0
 
-    return redirect("test_ask_question", qgroup_pk=qgroup_pk, question_index=0)
+    return redirect("ask_question", qgroup_pk=qgroup_pk, question_index=0)
 
 
-def test_ask_question(request, qgroup_pk, question_index):
+def ask_question(request, qgroup_pk, question_index):
     """
     View for asking a user a Question
     and letting him to choose one of its Answers.
@@ -62,7 +62,7 @@ def test_ask_question(request, qgroup_pk, question_index):
             ].bad_score
             if question_index < qgroup_len - 1:  # i < last
                 return redirect(
-                    "test_ask_question",
+                    "ask_question",
                     qgroup_pk=qgroup_pk,
                     question_index=question_index + 1,
                 )
@@ -77,7 +77,7 @@ def test_ask_question(request, qgroup_pk, question_index):
         "question": current_question,
         "fail_score": request.session["fail_score"],
     }
-    return render(request, "hyiptest/test_ask_question.html", context)
+    return render(request, "hyiptest/ask_question.html", context)
 
 
 def test_fail(request):

@@ -5,7 +5,7 @@
   <ul>
     {% for qgroup in qgroup_list %}
       <li>
-        <a href="{% url 'test_redirect_question' qgroup.pk %}">{{ qgroup.name }}</a>
+        <a href="{% url 'redirect_question' qgroup.pk %}">{{ qgroup.name }}</a>
       </li>
     {% empty %}
       <li>Тестов пока нет, приходите позже.</li>

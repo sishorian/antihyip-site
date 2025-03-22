@@ -7,17 +7,17 @@ urlpatterns = [
     # Home page
     path("", views.index, name="index"),
     # Test pages
-    path("tests/", views.TestSelectQGroup.as_view(), name="test_select_qgroup"),
+    path("tests/", views.SelectQGroup.as_view(), name="select_qgroup"),
     path(
         "test/<int:qgroup_pk>/",
-        views.test_redirect_question,
-        name="test_redirect_question",
+        views.redirect_question,
+        name="redirect_question",
     ),
     path(
         "test/<int:qgroup_pk>/<int:question_index>/",
-        views.test_ask_question,
-        name="test_ask_question",
+        views.ask_question,
+        name="ask_question",
     ),
-    path("test/fail/", views.test_fail, name="test_fail"),
-    path("test/pass/", views.test_pass, name="test_pass"),
+    path("test-fail/", views.test_fail, name="test_fail"),
+    path("test-pass/", views.test_pass, name="test_pass"),
 ]

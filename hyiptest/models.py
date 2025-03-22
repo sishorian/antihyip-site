@@ -47,7 +47,7 @@ class Answer(models.Model):
         ),
     )
     """
-    bad_score = models.SmallIntegerField(
+    bad_score = models.PositiveSmallIntegerField(
         default=100,  # pyright: ignore[reportArgumentType]
         help_text=_(  # pyright: ignore[reportArgumentType]
             "Likeliness of the site being a fraud, 100 = fraud"
