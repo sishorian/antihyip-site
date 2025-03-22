@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -73,6 +75,34 @@ class QGroup(models.Model):
     )
     questions = models.ManyToManyField(
         Question, help_text=_("That are part of this group")
+    )
+
+    def __str__(self):
+        return str(self.name)
+
+
+class BadSite(models.Model):
+    """
+    Model representing a site known to be fraud.
+    """
+
+    id = models.UUIDField(
+        "ID",
+        primary_key=True,
+        default=uuid.uuid4,
+        help_text=_("Unique ID for a particular site"),
+    )
+    name = models.CharField(
+        max_length=50,
+        unique=True,
+        help_text=_("Name of the site or the company behind it"),
+    )
+    domains = models.JSONField(
+        help_text=_("JSON list of strings of different domains of the same site")
+    )
+    bad_type = models.CharField(
+        max_length=100,
+        help_text=_("What type of fraud it is, e.g. pyramid, scam, etc."),
     )
 
     def __str__(self):
