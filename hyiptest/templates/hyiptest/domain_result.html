@@ -3,19 +3,30 @@
 {% block content %}
   <h1>Результат проверки домена сайта.</h1>
 
-  <p>Возможные совпадения:</p>
+  {% comment "'contains' domain lookup" %}
+  <p>Возможные совпадения с мошенническими сайтами:</p>
   {% for found_site in found_sites_queryset %}
     <p>Имя: {{ found_site.name }}</p>
     <p>Домены: {{ found_site.domain }}</p>
     <p>Тип: {{ found_site.bad_type }}</p>
   {% empty %}
     <p>Не найдены.</p>
-
-    <p>
-      <a href="{% url 'input_domain' %}">Попробовать снова</a>
-    </p>
-    <p>
-      <a href="{% url 'select_qgroup' %}">Проверить с помощью теста</a>
-    </p>
   {% endfor %}
+  {% endcomment %}
+
+  <p>Возможное совпадениe с мошенническим сайтом:</p>
+  {% if found_site is not None %}
+    <p>Имя: {{ found_site.name }}</p>
+    <p>Домены: {{ found_site.domain }}</p>
+    <p>Тип: {{ found_site.bad_type }}</p>
+  {% else %}
+    <p>Не найдено.</p>
+  {% endif %}
+
+  <p>
+    <a href="{% url 'input_domain' %}">Попробовать снова</a>
+  </p>
+  <p>
+    <a href="{% url 'select_qgroup' %}">Проверить с помощью теста</a>
+  </p>
 {% endblock %}

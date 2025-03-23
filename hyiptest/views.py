@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
@@ -21,7 +22,13 @@ def input_domain(request):
     elif request.method == "POST":
         form = InputDomainForm(request.POST)
         if form.is_valid():
-            return redirect("domain_result", form.cleaned_data["domain_name"])
+            return redirect(
+                "domain_result",
+                # According to the doc, should be a string.
+                # form.cleaned_data[ "domain_name" ].lower(),
+                # Should be lowercase because of the RegexField regex string.
+                form.cleaned_data["domain_name"],
+            )
 
     context = {
         "form": form,  # pyright: ignore[reportPossiblyUnboundVariable]
@@ -30,9 +37,25 @@ def input_domain(request):
 
 
 def domain_result(request, domain_query):
-    found_sites_queryset = BadSite.objects.filter(domain__iexact=domain_query)
+    """
+    Check the provided domain for matches in the database
+    and show the result to the user.
+    """
+    # domain_query should be already lowercase.
+    """
+    # Locate multiple domains using a substring.
+    found_sites_queryset = BadSite.objects.filter(domain__contains=domain_query)
     context = {
         "found_sites_queryset": found_sites_queryset,
+    }
+    """
+    # Locate the exact domain using an exact string.
+    try:
+        found_site = BadSite.objects.get(domain__exact=domain_query)
+    except ObjectDoesNotExist:
+        found_site = None
+    context = {
+        "found_site": found_site,
     }
     return render(request, "hyiptest/domain_result.html", context)
 
