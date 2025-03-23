@@ -92,13 +92,19 @@ class BadSite(models.Model):
         default=uuid.uuid4,
         help_text=_("Unique ID for a particular site"),
     )
+    # If there are multiple domains, just create entrires with duplicate name.
     name = models.CharField(
         max_length=50,
-        unique=True,
+        # unique=True,
         help_text=_("Name of the site or the company behind it"),
     )
-    domains = models.JSONField(
-        help_text=_("JSON list of strings of different domains of the same site")
+    # domains = models.JSONField(
+    #     help_text=_("JSON list of strings of different domains of the same site")
+    # )
+    domain = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text=_("Domain of the site, e.g. pyramid.com"),
     )
     bad_type = models.CharField(
         max_length=100,
