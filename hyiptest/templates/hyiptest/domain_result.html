@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Результат проверки домена сайта.</h1>
+
+  <p>Возможные совпадения:</p>
+  {% for found_site in found_sites_queryset %}
+    <p>Имя: {{ found_site.name }}</p>
+    <p>Домены: {{ found_site.domains }}</p>
+    <p>Тип: {{ found_site.bad_type }}</p>
+  {% empty %}
+    <p>Не найдены.</p>
+
+    <p>
+      <a href="{% url 'input_domain' %}">Попробовать снова</a>
+    </p>
+    <p>
+      <a href="{% url 'select_qgroup' %}">Проверить с помощью теста</a>
+    </p>
+  {% endfor %}
+{% endblock %}

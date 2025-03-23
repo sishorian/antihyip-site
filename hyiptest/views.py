@@ -2,13 +2,39 @@ from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
-from .forms import SelectAnswerForm
-from .models import QGroup
+from .forms import InputDomainForm, SelectAnswerForm
+from .models import BadSite, QGroup
 
 
 # Create your views here.
 def index(request):
     return render(request, "index.html")
+
+
+def input_domain(request):
+    """
+    Asks user for a domain of the site they want to check.
+    """
+
+    if request.method == "GET":
+        form = InputDomainForm()
+    elif request.method == "POST":
+        form = InputDomainForm(request.POST)
+        if form.is_valid():
+            return redirect("domain_result", form.cleaned_data["domain_name"])
+
+    context = {
+        "form": form,  # pyright: ignore[reportPossiblyUnboundVariable]
+    }
+    return render(request, "hyiptest/input_domain.html", context)
+
+
+def domain_result(request, domain_query):
+    found_sites_queryset = BadSite.objects.filter(domains__icontains=domain_query)
+    context = {
+        "found_sites_queryset": found_sites_queryset,
+    }
+    return render(request, "hyiptest/domain_result.html", context)
 
 
 class SelectQGroup(generic.ListView):
@@ -49,9 +75,9 @@ def ask_question(request, qgroup_pk, question_index):
             "No fail_score value was provided.".encode(encoding="utf-8")
         )
 
-    if request.method != "POST":  # to suppress "possibly unbound" error for form
+    if request.method == "GET":
         form = SelectAnswerForm(question_obj=current_question)
-    else:
+    elif request.method == "POST":
         form = SelectAnswerForm(request.POST, question_obj=current_question)
         while True:  # should not loop, run just once
             if not form.is_valid():
@@ -71,7 +97,7 @@ def ask_question(request, qgroup_pk, question_index):
             return redirect("test_pass")  # break
 
     context = {
-        "form": form,
+        "form": form,  # pyright: ignore[reportPossiblyUnboundVariable]
         "question_ordinal": question_index + 1,
         "num_questions": qgroup_len,
         "question": current_question,
