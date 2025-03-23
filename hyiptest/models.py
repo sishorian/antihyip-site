@@ -52,7 +52,7 @@ class Answer(models.Model):
     bad_score = models.PositiveSmallIntegerField(
         default=100,  # pyright: ignore[reportArgumentType]
         help_text=_(  # pyright: ignore[reportArgumentType]
-            "Likeliness of the site being a fraud, 100 = fraud"
+            "Likeliness of the site being a fraud"
         ),
     )
 
@@ -75,6 +75,15 @@ class QGroup(models.Model):
     )
     questions = models.ManyToManyField(
         Question, help_text=_("That are part of this group")
+    )
+
+    fail_floor = models.PositiveSmallIntegerField(
+        default=0,  # pyright: ignore[reportArgumentType]
+        help_text=_(  # pyright: ignore[reportArgumentType]
+            # Fail by default to reduce the theoretical damage
+            # of "forgot to set the value".
+            "Amount of the bad score for the site to be considered a fraud"
+        ),
     )
 
     def __str__(self):

@@ -1,6 +1,7 @@
-# Temporary script to create models for the test.
+# Temporary script to create Questions, Answers, QGroups for the test.
 from hyiptest.models import Answer, QGroup, Question
 
+# Questions + Answers for QGroup1
 q = Question.objects.create(text="Какова цель сайта?")
 a = Answer.objects.create(
     text="Инвестирование или получение дохода", bad_score=2, question=q
@@ -59,7 +60,8 @@ a = Answer.objects.create(text="Внести предоплату", bad_score=5,
 a = Answer.objects.create(text="Поделиться сайтом для бонусов", bad_score=3, question=q)
 a = Answer.objects.create(text="Просто зарегистрироваться", bad_score=0, question=q)
 
-g = QGroup.objects.create(name="Тест на мошенников")
+# QGroup1
+g = QGroup.objects.create(name="Тест на мошенников", fail_floor=16)
 
 g.questions.set(Question.objects.all())
 

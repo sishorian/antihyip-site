@@ -62,14 +62,16 @@ def ask_question(request, qgroup_pk, question_index):
     and letting him to choose one of its Answers.
     """
 
-    qgroup_questions = get_object_or_404(QGroup, pk=qgroup_pk).questions.all()
+    qgroup = get_object_or_404(QGroup, pk=qgroup_pk)
+    qgroup_questions = qgroup.questions.all()
+    qgroup_len = len(qgroup_questions)
+
     try:
         current_question = qgroup_questions[question_index]
     except IndexError:
         raise Http404(
             f"QGroup {qgroup_pk} doesn't have a question under index {question_index}."
         )
-    qgroup_len = len(qgroup_questions)
     if "fail_score" not in request.session:
         return HttpResponseBadRequest(
             "No fail_score value was provided.".encode(encoding="utf-8")
@@ -92,7 +94,7 @@ def ask_question(request, qgroup_pk, question_index):
                     qgroup_pk=qgroup_pk,
                     question_index=question_index + 1,
                 )
-            if request.session["fail_score"] >= 16:
+            if request.session["fail_score"] >= qgroup.fail_floor:
                 return redirect("test_fail")
             return redirect("test_pass")  # break
 
