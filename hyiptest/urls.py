@@ -6,6 +6,11 @@ from . import views
 urlpatterns = [
     # Home page
     path("", views.index, name="index"),
+    # Generic views
+    path("questions/", views.QuestionListView.as_view(), name="question_list"),
+    path(
+        "question/<int:pk>", views.QuestionDetailView.as_view(), name="question_detail"
+    ),
 ]
 
 # Test pages

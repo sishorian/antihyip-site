@@ -4,12 +4,21 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
 from .forms import InputDomainForm, SelectAnswerForm
-from .models import BadSite, QGroup
+from .models import BadSite, QGroup, Question
 
 
 # Create your views here.
 def index(request):
     return render(request, "index.html")
+
+
+class QuestionListView(generic.ListView):
+    model = Question
+    paginate_by = 20
+
+
+class QuestionDetailView(generic.DetailView):
+    model = Question
 
 
 def input_domain(request):

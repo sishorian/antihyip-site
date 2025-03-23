@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 
@@ -19,6 +20,9 @@ class Question(models.Model):
 
     def __str__(self):
         return str(self.text)
+
+    def get_absolute_url(self):
+        return reverse("question_detail", kwargs={"pk": self.pk})
 
 
 class Answer(models.Model):

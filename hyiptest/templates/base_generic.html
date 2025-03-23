@@ -30,11 +30,20 @@
               <li>
                 <a href="{% url 'index' %}">Домашняя страница</a>
               </li>
+            </ul>
+
+            <ul class="sidebar-nav">
               <li>
                 <a href="{% url 'input_domain' %}">Проверить домен сайта</a>
               </li>
               <li>
-                <a href="{% url 'select_qgroup' %}">Проверить сайт с помощью теста</a>
+                <a href="{% url 'select_qgroup' %}">Тест</a>
+              </li>
+            </ul>
+
+            <ul class="sidebar-nav">
+              <li>
+                <a href="{% url 'question_list' %}">Список вопросов</a>
               </li>
             </ul>
           {% endblock %}
@@ -43,7 +52,23 @@
         <div class="col-sm-10">
           {% block content %}{% endblock %}
 
-          {% block pagination %}{% endblock %}
+          {% block pagination %}
+            {% if is_paginated %}
+              <div class="pagination">
+                <span class="page-links">
+                  {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a>
+                  {% endif %}
+                  <span class="page-current">
+                    <strong>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</strong>
+                  </span>
+                  {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a>
+                  {% endif %}
+                </span>
+              </div>
+            {% endif %}
+          {% endblock %}
         </div>
       </div>
 

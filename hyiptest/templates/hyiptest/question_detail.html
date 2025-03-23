@@ -1,0 +1,47 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Вопрос ({{ question.pk }}).</h1>
+
+  <p>
+    <strong>Текст:</strong> {{ question.text }}
+  </p>
+
+  <p>
+    <strong>Описание:</strong>
+    {% if question.description %}
+      {{ question.description }}
+    {% else %}
+      <strong>Отсутствует</strong>
+    {% endif %}
+  </p>
+
+  <div class="antihyip-inline-answers">
+    <h4>Ответы</h4>
+
+    {% for answer in question.answer_set.all %}
+      <hr />
+      <p>
+        <strong>Текст:</strong> {{ answer.text }}
+      </p>
+
+      <p>
+        <strong>Плохие очки:</strong> {{ answer.bad_score }}
+      </p>
+
+      <p>
+        <strong>Описание:</strong>
+        {% if answer.description %}
+          {{ answer.description }}
+        {% else %}
+          <strong>Отсутствует</strong>
+        {% endif %}
+      </p>
+    {% empty %}
+      <hr />
+      <p>
+        <strong>Отсутствуют</strong>
+      </p>
+    {% endfor %}
+  </div>
+{% endblock %}
