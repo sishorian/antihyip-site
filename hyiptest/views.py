@@ -30,7 +30,7 @@ def input_domain(request):
 
 
 def domain_result(request, domain_query):
-    found_sites_queryset = BadSite.objects.filter(domains__icontains=domain_query)
+    found_sites_queryset = BadSite.objects.filter(domain__iexact=domain_query)
     context = {
         "found_sites_queryset": found_sites_queryset,
     }

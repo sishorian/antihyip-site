@@ -6,7 +6,7 @@
   <p>Возможные совпадения:</p>
   {% for found_site in found_sites_queryset %}
     <p>Имя: {{ found_site.name }}</p>
-    <p>Домены: {{ found_site.domains }}</p>
+    <p>Домены: {{ found_site.domain }}</p>
     <p>Тип: {{ found_site.bad_type }}</p>
   {% empty %}
     <p>Не найдены.</p>
