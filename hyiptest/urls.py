@@ -6,9 +6,12 @@ from . import views
 urlpatterns = [
     # Home page
     path("", views.index, name="index"),
-    # Test pages
+]
+
+# Test pages
+urlpatterns += [
     path("check-domain/", views.input_domain, name="input_domain"),
-    path("check-domain/<str:domain_query>/", views.domain_result, name="domain_result"),
+    path("check-domain/<str:query>/", views.domain_result, name="domain_result"),
     path("tests/", views.SelectQGroup.as_view(), name="select_qgroup"),
     path(
         "test/<int:qgroup_pk>/",

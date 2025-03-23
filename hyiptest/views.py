@@ -36,22 +36,22 @@ def input_domain(request):
     return render(request, "hyiptest/input_domain.html", context)
 
 
-def domain_result(request, domain_query):
+def domain_result(request, query):
     """
     Check the provided domain for matches in the database
     and show the result to the user.
     """
-    # domain_query should be already lowercase.
+    # query should be already lowercase.
     """
     # Locate multiple domains using a substring.
-    found_sites_queryset = BadSite.objects.filter(domain__contains=domain_query)
+    found_sites_queryset = BadSite.objects.filter(domain__contains=query)
     context = {
         "found_sites_queryset": found_sites_queryset,
     }
     """
     # Locate the exact domain using an exact string.
     try:
-        found_site = BadSite.objects.get(domain__exact=domain_query)
+        found_site = BadSite.objects.get(domain__exact=query)
     except ObjectDoesNotExist:
         found_site = None
     context = {
