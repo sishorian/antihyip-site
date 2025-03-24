@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Мошеннический сайт ({{ badsite.pk }}).</h1>
+
+  <p>
+    <strong>Имя:</strong> {{ badsite.name }}
+  </p>
+
+  <p>
+    <strong>Доменное имя:</strong> {{ badsite.domain }}
+  </p>
+
+  <p>
+    <strong>Тип:</strong> {{ badsite.bad_type }}
+  </p>
+{% endblock %}

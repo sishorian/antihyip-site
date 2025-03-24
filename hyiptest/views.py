@@ -21,6 +21,15 @@ class QuestionDetailView(generic.DetailView):
     model = Question
 
 
+class BadSiteListView(generic.ListView):
+    model = BadSite
+    paginate_by = 20
+
+
+class BadSiteDetailView(generic.DetailView):
+    model = BadSite
+
+
 def input_domain(request):
     """
     Asks user for a domain of the site they want to check.

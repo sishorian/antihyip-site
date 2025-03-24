@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Список мошеннических сайтов.</h1>
+
+  <ul>
+    {% for badsite in badsite_list %}
+      <li>
+        <!-- Use badsite's __str__(). -->
+        <a href="{{ badsite.get_absolute_url }}">{{ badsite }}</a>
+      </li>
+    {% empty %}
+      <li>Сайтов в базе не найдено.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

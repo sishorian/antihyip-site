@@ -103,6 +103,7 @@ class BadSite(models.Model):
         "ID",
         primary_key=True,
         default=uuid.uuid4,
+        editable=False,
         help_text=_("Unique ID for a particular site"),
     )
     # If there are multiple domains, just create entrires with duplicate name.
@@ -125,4 +126,7 @@ class BadSite(models.Model):
     )
 
     def __str__(self):
-        return str(self.name)
+        return f"{self.name} @ {self.domain} [{self.pk}]"
+
+    def get_absolute_url(self):
+        return reverse("badsite_detail", kwargs={"pk": self.pk})

@@ -11,20 +11,22 @@ urlpatterns = [
     path(
         "question/<int:pk>", views.QuestionDetailView.as_view(), name="question_detail"
     ),
+    path("badsites/", views.BadSiteListView.as_view(), name="badsite_list"),
+    path("badsite/<uuid:pk>", views.BadSiteDetailView.as_view(), name="badsite_detail"),
 ]
 
 # Test pages
 urlpatterns += [
     path("check-domain/", views.input_domain, name="input_domain"),
-    path("check-domain/<str:query>/", views.domain_result, name="domain_result"),
+    path("check-domain/<str:query>", views.domain_result, name="domain_result"),
     path("tests/", views.SelectQGroup.as_view(), name="select_qgroup"),
     path(
-        "test/<int:qgroup_pk>/",
+        "test/<int:qgroup_pk>",
         views.redirect_question,
         name="redirect_question",
     ),
     path(
-        "test/<int:qgroup_pk>/<int:question_index>/",
+        "test/<int:qgroup_pk>/<int:question_index>",
         views.ask_question,
         name="ask_question",
     ),
