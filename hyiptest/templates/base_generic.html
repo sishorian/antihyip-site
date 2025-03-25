@@ -21,60 +21,67 @@
   </head>
 
   <body>
-    <div class="container-fluid">
+    <section id="background" data-bs-theme="dark">
+      <div class="container-fluid">
+        <div class="row">
 
-      <div class="row">
-        <div class="col-sm-2">
-          {% block sidebar %}
-            <ul class="sidebar-nav">
-              <li>
-                <a href="{% url 'index' %}">Домашняя страница</a>
-              </li>
-            </ul>
+          <div class="col-md-4 col-xl-2">
+            {% block sidebar %}
+              <ul class="nav flex-column mb-auto mt-0">
+                <li class="nav-item">
+                  <a class="nav-link text-bg-light ah-sidebar-title"
+                     href="{% url 'index' %}">AntiHyip</a>
+                </li>
 
-            <ul class="sidebar-nav">
-              <li>
-                <a href="{% url 'input_domain' %}">Проверить домен сайта</a>
-              </li>
-              <li>
-                <a href="{% url 'select_qgroup' %}">Тест</a>
-              </li>
-            </ul>
+                <li class="nav-item">
+                  <a class="nav-link text-bg-light ah-sidebar-mid-link"
+                     href="{% url 'input_domain' %}">Проверить домен сайта</a>
+                </li>
 
-            <ul class="sidebar-nav">
-              <li>
-                <a href="{% url 'question_list' %}">Список вопросов</a>
-              </li>
-              <li>
-                <a href="{% url 'badsite_list' %}">База сайтов</a>
-              </li>
-            </ul>
-          {% endblock %}
-        </div>
+                <li class="nav-item">
+                  <a class="nav-link text-bg-light ah-sidebar-bottom-link"
+                     href="{% url 'select_qgroup' %}">Проверить сайт с помощью теста</a>
+                </li>
+              </ul>
 
-        <div class="col-sm-10">
-          {% block content %}{% endblock %}
+              <ul class="nav flex-column mb-auto mt-2">
+                <li class="nav-item">
+                  <a class="nav-link text-bg-light ah-sidebar-top-link"
+                     href="{% url 'question_list' %}">Список вопросов</a>
+                </li>
 
-          {% block pagination %}
-            {% if is_paginated %}
-              <div class="pagination">
-                <span class="page-links">
-                  {% if page_obj.has_previous %}
-                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a>
-                  {% endif %}
-                  <span class="page-current">
-                    <strong>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</strong>
+                <li class="nav-item">
+                  <a class="nav-link text-bg-light ah-sidebar-bottom-link"
+                     href="{% url 'badsite_list' %}">База сайтов</a>
+                </li>
+              </ul>
+            {% endblock sidebar %}
+          </div>
+
+          <div class="col-md-8">
+            {% block content %}{% endblock %}
+
+            {% block pagination %}
+              {% if is_paginated %}
+                <div class="pagination ah-div">
+                  <span class="page-links">
+                    {% if page_obj.has_previous %}
+                      <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a>
+                    {% endif %}
+                    <span class="page-current">
+                      <strong>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</strong>
+                    </span>
+                    {% if page_obj.has_next %}
+                      <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a>
+                    {% endif %}
                   </span>
-                  {% if page_obj.has_next %}
-                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a>
-                  {% endif %}
-                </span>
-              </div>
-            {% endif %}
-          {% endblock %}
+                </div>
+              {% endif %}
+            {% endblock pagination %}
+          </div>
+
         </div>
       </div>
-
-    </div>
+    </section>
   </body>
 </html>

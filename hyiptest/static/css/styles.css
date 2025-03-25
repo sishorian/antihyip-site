@@ -1,10 +1,52 @@
-.sidebar-nav {
-  margin-top: 20px;
-  padding: 0;
-  list-style: none;
+#background {
+  width: 100%;
+  height: 100vh;
+  border-color: rgb(33, 37, 41);
+  color: rgb(255, 255, 255);
+  background: rgb(33, 37, 41);
+  overflow: auto;
 }
 
-.antihyip-inline-answers {
-  margin-left: 20px;
-  margin-top: 20px;
+/* Headings were too big. */
+h1 {
+  font-size: 2rem;
+  margin-top: 0.5rem;
+}
+
+p,
+ul,
+form,
+.ah-div {
+  margin-top: 1rem;
+}
+
+.ah-sidebar-title {
+  font-size: 32px;
+  font-weight: bold;
+  background: rgb(255, 255, 255);
+  border-radius: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.ah-sidebar-top-link {
+  font-weight: bold;
+  background: rgb(255, 255, 255);
+  border-radius: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.ah-sidebar-mid-link {
+  font-weight: bold;
+  background: rgb(255, 255, 255);
+  border-radius: 0px;
+}
+
+.ah-sidebar-bottom-link {
+  font-weight: bold;
+  background: rgb(255, 255, 255);
+  border-radius: 0px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
