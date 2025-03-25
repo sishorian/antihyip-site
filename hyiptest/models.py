@@ -104,6 +104,17 @@ class QGroup(models.Model):
         ),
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                Lower("name"),
+                name="qgroup_name_unique_ci",  # ci -> case-insensitive
+                violation_error_message=_(
+                    "QGroup already exists (case-insensitive match)"
+                ),
+            ),
+        ]
+
     def __str__(self):
         return str(self.name)
 
@@ -138,6 +149,17 @@ class BadSite(models.Model):
         max_length=100,
         help_text=_("What type of fraud it is, e.g. pyramid, scam, etc."),
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                Lower("domain"),
+                name="badsite_domain_unique_ci",  # ci -> case-insensitive
+                violation_error_message=_(
+                    "BadSite with this domain already exists (case-insensitive match)"
+                ),
+            ),
+        ]
 
     def __str__(self):
         return f"{self.name} @ {self.domain} [{self.pk}]"
