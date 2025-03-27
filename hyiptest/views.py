@@ -145,13 +145,30 @@ def ask_question(request, qgroup_pk, question_index):
         "num_questions": qgroup_len,
         "question": current_question,
         "fail_score": request.session["fail_score"],
+        "fail_floor": qgroup.fail_floor,
     }
     return render(request, "hyiptest/ask_question.html", context)
 
 
 def test_fail(request):
-    return render(request, "hyiptest/test_fail.html")
+    if "fail_score" not in request.session:
+        return HttpResponseBadRequest(
+            "No fail_score value was provided.".encode(encoding="utf-8")
+        )
+
+    context = {
+        "fail_score": request.session["fail_score"],
+    }
+    return render(request, "hyiptest/test_fail.html", context)
 
 
 def test_pass(request):
-    return render(request, "hyiptest/test_pass.html")
+    if "fail_score" not in request.session:
+        return HttpResponseBadRequest(
+            "No fail_score value was provided.".encode(encoding="utf-8")
+        )
+
+    context = {
+        "fail_score": request.session["fail_score"],
+    }
+    return render(request, "hyiptest/test_pass.html", context)
