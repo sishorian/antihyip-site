@@ -125,7 +125,9 @@ a = Answer.objects.create(
 
 # QGroup1
 g = QGroup.objects.create(
-    name="Опросник проверки безопасности сайта", risk_fail_trigger=11
+    name="Опросник проверки безопасности сайта",
+    risk_fail_trigger=11,
+    risk_suspicious_trigger=6,
 )
 
 g.questions.set(Question.objects.all())

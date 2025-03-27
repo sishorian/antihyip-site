@@ -136,6 +136,8 @@ def ask_question(request, qgroup_pk, question_index):
                 )
             if request.session["risk_score"] >= qgroup.risk_fail_trigger:
                 return redirect("test_fail")
+            if request.session["risk_score"] >= qgroup.risk_suspicious_trigger:
+                return redirect("test_suspicious")
             return redirect("test_pass")  # break
 
     context = {
@@ -145,8 +147,21 @@ def ask_question(request, qgroup_pk, question_index):
         "question": current_question,
         "risk_score": request.session["risk_score"],
         "risk_fail_trigger": qgroup.risk_fail_trigger,
+        "risk_suspicious_trigger": qgroup.risk_suspicious_trigger,
     }
     return render(request, "hyiptest/ask_question.html", context)
+
+
+def test_pass(request):
+    if "risk_score" not in request.session:
+        return HttpResponseBadRequest(
+            "No risk_score value was provided.".encode(encoding="utf-8")
+        )
+
+    context = {
+        "risk_score": request.session["risk_score"],
+    }
+    return render(request, "hyiptest/test_pass.html", context)
 
 
 def test_fail(request):
@@ -161,7 +176,7 @@ def test_fail(request):
     return render(request, "hyiptest/test_fail.html", context)
 
 
-def test_pass(request):
+def test_suspicious(request):
     if "risk_score" not in request.session:
         return HttpResponseBadRequest(
             "No risk_score value was provided.".encode(encoding="utf-8")
@@ -170,4 +185,4 @@ def test_pass(request):
     context = {
         "risk_score": request.session["risk_score"],
     }
-    return render(request, "hyiptest/test_pass.html", context)
+    return render(request, "hyiptest/test_suspicious.html", context)

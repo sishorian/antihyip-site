@@ -30,6 +30,7 @@ urlpatterns += [
         views.ask_question,
         name="ask_question",
     ),
-    path("test-fail/", views.test_fail, name="test_fail"),
     path("test-pass/", views.test_pass, name="test_pass"),
+    path("test-fail/", views.test_fail, name="test_fail"),
+    path("test-suspicious/", views.test_suspicious, name="test_suspicious"),
 ]

@@ -10,6 +10,13 @@
     <input type="submit" value="Далее">
   </form>
 
-  <p>Набранные баллы риска: {{ risk_score }}.</p>
-  <p>Порог срабатывания: {{ risk_fail_trigger }}.</p>
+  <p>Набранно баллов риска: {{ risk_score }}.</p>
+  <p>
+    Сайт <span class="text-danger">мошеннический</span>,
+    если набрано ≥ {{ risk_fail_trigger }} баллов.
+  </p>
+  <p>
+    Сайт <span class="text-warning">сомнительный</span>,
+    если набрано ≥ {{ risk_suspicious_trigger }} баллов.
+  </p>
 {% endblock %}

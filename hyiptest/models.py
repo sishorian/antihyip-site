@@ -103,6 +103,12 @@ class QGroup(models.Model):
             "Amount of the risk score for the site to be considered a fraud"
         ),
     )
+    risk_suspicious_trigger = models.PositiveSmallIntegerField(
+        default=0,  # pyright: ignore[reportArgumentType]
+        help_text=_(  # pyright: ignore[reportArgumentType]
+            "Amount of the risk score for the site to be considered suspicious"
+        ),
+    )
 
     class Meta:
         constraints = [
