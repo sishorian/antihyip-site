@@ -92,7 +92,7 @@ def redirect_question(request, qgroup_pk):
     qgroup = get_object_or_404(QGroup, pk=qgroup_pk)
     if not list(qgroup.questions.all()):
         raise Http404(f"QGroup {qgroup_pk} doesn't have any questions.")
-    request.session["fail_score"] = 0
+    request.session["risk_score"] = 0
 
     return redirect("ask_question", qgroup_pk=qgroup_pk, question_index=0)
 
@@ -105,7 +105,6 @@ def ask_question(request, qgroup_pk, question_index):
 
     qgroup = get_object_or_404(QGroup, pk=qgroup_pk)
     qgroup_questions = qgroup.questions.all()
-    qgroup_len = len(qgroup_questions)
 
     try:
         current_question = qgroup_questions[question_index]
@@ -113,9 +112,9 @@ def ask_question(request, qgroup_pk, question_index):
         raise Http404(
             f"QGroup {qgroup_pk} doesn't have a question under index {question_index}."
         )
-    if "fail_score" not in request.session:
+    if "risk_score" not in request.session:
         return HttpResponseBadRequest(
-            "No fail_score value was provided.".encode(encoding="utf-8")
+            "No risk_score value was provided.".encode(encoding="utf-8")
         )
 
     if request.method == "GET":
@@ -126,49 +125,49 @@ def ask_question(request, qgroup_pk, question_index):
             if not form.is_valid():
                 break
 
-            request.session["fail_score"] += form.cleaned_data[
+            request.session["risk_score"] += form.cleaned_data[
                 "selected_answer"
-            ].bad_score
-            if question_index < qgroup_len - 1:  # i < last
+            ].risk_score
+            if question_index < len(qgroup_questions) - 1:  # i < last
                 return redirect(
                     "ask_question",
                     qgroup_pk=qgroup_pk,
                     question_index=question_index + 1,
                 )
-            if request.session["fail_score"] >= qgroup.fail_floor:
+            if request.session["risk_score"] >= qgroup.risk_fail_trigger:
                 return redirect("test_fail")
             return redirect("test_pass")  # break
 
     context = {
         "form": form,  # pyright: ignore[reportPossiblyUnboundVariable]
         "question_ordinal": question_index + 1,
-        "num_questions": qgroup_len,
+        "num_questions": len(qgroup_questions),
         "question": current_question,
-        "fail_score": request.session["fail_score"],
-        "fail_floor": qgroup.fail_floor,
+        "risk_score": request.session["risk_score"],
+        "risk_fail_trigger": qgroup.risk_fail_trigger,
     }
     return render(request, "hyiptest/ask_question.html", context)
 
 
 def test_fail(request):
-    if "fail_score" not in request.session:
+    if "risk_score" not in request.session:
         return HttpResponseBadRequest(
-            "No fail_score value was provided.".encode(encoding="utf-8")
+            "No risk_score value was provided.".encode(encoding="utf-8")
         )
 
     context = {
-        "fail_score": request.session["fail_score"],
+        "risk_score": request.session["risk_score"],
     }
     return render(request, "hyiptest/test_fail.html", context)
 
 
 def test_pass(request):
-    if "fail_score" not in request.session:
+    if "risk_score" not in request.session:
         return HttpResponseBadRequest(
-            "No fail_score value was provided.".encode(encoding="utf-8")
+            "No risk_score value was provided.".encode(encoding="utf-8")
         )
 
     context = {
-        "fail_score": request.session["fail_score"],
+        "risk_score": request.session["risk_score"],
     }
     return render(request, "hyiptest/test_pass.html", context)
