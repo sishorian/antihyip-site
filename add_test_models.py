@@ -88,10 +88,7 @@ a = Answer.objects.create(
 )
 
 q = Question.objects.create(
-    text=(
-        "Присутствуют ли на сайте логотипы известных компаний"
-        " или рекомендации знаменитостей?"
-    )
+    text="Присутствуют ли на сайте логотипы или упоминания известных компаний?"
 )
 a = Answer.objects.create(
     text="Да, но без подтверждения (нет ссылок на первоисточник)",
@@ -102,8 +99,8 @@ a = Answer.objects.create(text="Нет", risk_score=0, question=q)
 
 q = Question.objects.create(
     text=(
-        "Требует ли сайт паспортные данные, "
-        "банковскую информацию без объяснения причин?"
+        "Требует ли сайт паспортные данные,"
+        " банковскую информацию или другие документы удостоверяющие личность?"
     )
 )
 a = Answer.objects.create(text="Да, требуют сразу", risk_score=3, question=q)
@@ -112,20 +109,15 @@ a = Answer.objects.create(
 )
 a = Answer.objects.create(text="Нет", risk_score=0, question=q)
 
-q = Question.objects.create(
-    text=(
-        "Найдены ли в интернете отзывы о том, "
-        "что сайт – мошеннический или финансовая пирамида?"
-    )
-)
+q = Question.objects.create(text="Найдены ли в интернете какие-либо отзывы о сайте?")
 a = Answer.objects.create(
     text="Да, много жалоб на мошенничество", risk_score=5, question=q
 )
 a = Answer.objects.create(
-    text="Есть некоторые негативные отзывы, но не доказано", risk_score=2, question=q
+    text="Есть некоторые негативные отзывы", risk_score=2, question=q
 )
 a = Answer.objects.create(
-    text="Нет, отзывы в основном положительные", risk_score=0, question=q
+    text="Да, отзывы в основном положительные", risk_score=0, question=q
 )
 a = Answer.objects.create(
     text="Немного или вообще нет отзывов", risk_score=3, question=q
