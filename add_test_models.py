@@ -56,6 +56,11 @@ a = Answer.objects.create(text="Нет", risk_score=0, question=q)
 q = Question.objects.create(
     text="Можно ли легко вывести деньги с сайта? (по отзывам или личному опыту)"
 )
+a = Answer.objects.create(
+    text="Не нужно выводить (сайт не предлагает вкладываться и т.п.)",
+    risk_score=0,
+    question=q,
+)
 a = Answer.objects.create(text="Да, вывод без проблем", risk_score=0, question=q)
 a = Answer.objects.create(
     text="Есть задержки, но деньги выводят", risk_score=1, question=q
@@ -95,7 +100,9 @@ a = Answer.objects.create(
     risk_score=2,
     question=q,
 )
-a = Answer.objects.create(text="Нет", risk_score=0, question=q)
+a = Answer.objects.create(
+    text="Нет (или есть, но с подтверждением)", risk_score=0, question=q
+)
 
 q = Question.objects.create(
     text=(
